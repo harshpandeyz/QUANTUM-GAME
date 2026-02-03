@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NV Center Quantum Lab</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- Top Navigation -->
+<nav class="top-nav">
+    <div class="nav-content">
+        <div class="nav-left">
+            <h1 class="nav-title">🔬 NV Quantum Lab</h1>
+        </div>
+        <div class="nav-right">
+            <div class="xp-display">
+                <span class="xp-label">XP</span>
+                <span id="xpAmount">0</span>
+            </div>
+            <div class="level-display">
+                <span class="level-label">LVL</span>
+                <span id="levelAmount">1</span>
+            </div>
+            <div class="badges-mini">
+                <span class="badge-count" id="badgeCount">0</span>🏆
+            </div>
+            <button class="btn btn--primary btn--sm" id="continueBtn">Continue Mission</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Dashboard -->
+<main class="dashboard">
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Choose Your Mission</h2>
+            <p>Master the quantum realm of NV centers through interactive challenges</p>
+        </div>
+
+        <div class="modules-grid">
+            <!-- Module 1: Create the NV -->
+            <div class="module-tile" data-module="nv">
+                <div class="module-icon">🔷</div>
+                <div class="module-content">
+                    <h3>Create the NV</h3>
+                    <p>Build the defect. Make N–V in diamond.</p>
+                    <div class="module-microcopy">Place N, make a vacancy, anneal. Fewer moves = more points.</div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="25" cy="25" r="20"></circle>
+                            <circle class="progress-circle" cx="25" cy="25" r="20" data-progress="0"></circle>
+                        </svg>
+                        <span class="progress-text" data-progress="0">0%</span>
+                    </div>
+                </div>
+                <div class="module-score">Best: <span id="nvScore">0</span></div>
+            </div>
+
+            <!-- Module 2: ODMR -->
+            <div class="module-tile locked" data-module="odmr">
+                <div class="module-icon">📡</div>
+                <div class="module-content">
+                    <h3>Light & Spin</h3>
+                    <p>Shine laser. Sweep microwaves. Find the dip.</p>
+                    <div class="module-microcopy">Sweep microwaves and watch for fluorescence dips. Lock it in!</div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="25" cy="25" r="20"></circle>
+                            <circle class="progress-circle" cx="25" cy="25" r="20" data-progress="0"></circle>
+                        </svg>
+                        <span class="progress-text" data-progress="0">0%</span>
+                    </div>
+                </div>
+                <div class="module-score">Best: <span id="odmrScore">0</span></div>
+                <div class="lock-overlay">🔒</div>
+            </div>
+
+            <!-- Module 3: Missions -->
+            <div class="module-tile locked" data-module="missions">
+                <div class="module-icon">🧭</div>
+                <div class="module-content">
+                    <h3>Sense & Decode</h3>
+                    <p>Use NV to measure the world.</p>
+                    <div class="module-microcopy">Convert shifts to fields. Map accuracy beats speed.</div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="25" cy="25" r="20"></circle>
+                            <circle class="progress-circle" cx="25" cy="25" r="20" data-progress="0"></circle>
+                        </svg>
+                        <span class="progress-text" data-progress="0">0%</span>
+                    </div>
+                </div>
+                <div class="module-score">Best: <span id="missionsScore">0</span></div>
+                <div class="lock-overlay">🔒</div>
+            </div>
+
+            <!-- Module 4: Quiz -->
+            <div class="module-tile" data-module="quiz">
+                <div class="module-icon">🧪</div>
+                <div class="module-content">
+                    <h3>Quiz & Boss</h3>
+                    <p>Prove it. Fast fire questions.</p>
+                    <div class="module-microcopy">30–60 sec rounds. Earn badges, climb the board.</div>
+                    <div class="progress-ring">
+                        <svg class="progress-svg">
+                            <circle class="progress-circle-bg" cx="25" cy="25" r="20"></circle>
+                            <circle class="progress-circle" cx="25" cy="25" r="20" data-progress="0"></circle>
+                        </svg>
+                        <span class="progress-text" data-progress="0">0%</span>
+                    </div>
+                </div>
+                <div class="module-score">Best: <span id="quizScore">0</span></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Module Modals -->
+
+<!-- NV Creation Module -->
+<div class="modal hidden" id="nvModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔷 Create the NV Center</h3>
+            <button class="modal-close" data-modal="nvModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="game-info">
+                <div class="stat">Moves: <span id="nvMoves">0</span></div>
+                <div class="stat">Time: <span id="nvTime">0</span>s</div>
+                <div class="stat">Score: <span id="nvCurrentScore">100</span></div>
+            </div>
+
+            <div class="lattice-container">
+                <div class="lattice-grid" id="latticeGrid"></div>
+            </div>
+
+            <div class="lattice-controls">
+                <div class="atom-palette">
+                    <div class="atom-option active" data-atom="carbon">
+                        <div class="atom carbon">C</div>
+                        <span>Carbon</span>
+                    </div>
+                    <div class="atom-option" data-atom="nitrogen">
+                        <div class="atom nitrogen">N</div>
+                        <span>Nitrogen</span>
+                    </div>
+                    <div class="atom-option" data-atom="vacancy">
+                        <div class="atom vacancy">□</div>
+                        <span>Vacancy</span>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn--primary" id="annealBtn">🔥 Anneal Crystal</button>
+                    <button class="btn btn--secondary" id="resetLattice">↻ Reset</button>
+                </div>
+            </div>
+
+            <div class="instruction-panel">
+                <h4>Instructions:</h4>
+                <ol>
+                    <li>Select Nitrogen from palette</li>
+                    <li>Place N atom adjacent to where you want the vacancy</li>
+                    <li>Select Vacancy and place it next to the N</li>
+                    <li>Click Anneal to form the NV center</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ODMR Module -->
+<div class="modal hidden" id="odmrModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3>📡 ODMR Tuner Simulation</h3>
+            <button class="modal-close" data-modal="odmrModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="odmr-layout">
+                <div class="controls-panel">
+                    <h4>Control Panel</h4>
+
+                    <div class="control-group">
+                        <label>Microwave Frequency</label>
+                        <input type="range" id="frequencySlider" min="2800" max="2900" value="2850" step="0.1">
+                        <span id="frequencyValue">2.85 GHz</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Magnetic Field</label>
+                        <input type="range" id="magneticField" min="0" max="100" value="0" step="1">
+                        <span id="magneticFieldValue">0 G</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Laser Power</label>
+                        <input type="range" id="laserPower" min="10" max="100" value="50" step="5">
+                        <span id="laserPowerValue">50 mW</span>
+                    </div>
+
+                    <div class="status-panel">
+                        <div class="status-item">
+                            <span>Lock Status:</span>
+                            <span id="lockStatus" class="status">Unlocked</span>
+                        </div>
+                        <div class="status-item">
+                            <span>SNR:</span>
+                            <span id="snrValue">0 dB</span>
+                        </div>
+                        <div class="status-item">
+                            <span>Score:</span>
+                            <span id="odmrCurrentScore">0</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn--primary" id="autoLockBtn">🎯 Auto Lock</button>
+                </div>
+
+                <div class="spectrum-panel">
+                    <h4>Fluorescence Spectrum</h4>
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="odmrChart"></canvas>
+                    </div>
+                    <div class="target-info">
+                        <p>Target: Find and lock onto the resonance dip at ~2.87 GHz</p>
+                        <p>Hold lock for 5+ seconds for maximum score</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Missions Module -->
+<div class="modal hidden" id="missionsModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3>🧭 Sense & Decode Mission Control</h3>
+            <button class="modal-close" data-modal="missionsModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="mission-layout">
+                <div class="mission-controls">
+                    <h4>Mission Control</h4>
+                    <div class="mission-info">
+                        <div class="stat">Measurements: <span id="measurements">0</span></div>
+                        <div class="stat">Efficiency: <span id="efficiency">100</span>%</div>
+                        <div class="stat">Score: <span id="missionsCurrentScore">100</span></div>
+                    </div>
+
+                    <div class="mission-selector">
+                        <label>Mission Type:</label>
+                        <select id="missionType" class="form-control">
+                            <option value="magnetic">Magnetic Field Mapping</option>
+                            <option value="biosensing">Biosensing Simulation</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn--primary" id="startMission">🚀 Start Mission</button>
+                    <button class="btn btn--secondary" id="resetMission">↻ Reset</button>
+                </div>
+
+                <div class="sample-map">
+                    <h4>Sample Map</h4>
+                    <div class="map-container">
+                        <svg id="sampleMap" width="300" height="300">
+                            <!-- Sample map will be generated here -->
+                        </svg>
+                    </div>
+                    <div class="probe-info">
+                        <p>Click on the map to take measurements</p>
+                        <p>Current Position: <span id="probePosition">(0, 0)</span></p>
+                        <p>Field Strength: <span id="fieldStrength">0.0 G</span></p>
+                    </div>
+                </div>
+
+                <div class="data-panel">
+                    <h4>Field Data</h4>
+                    <div class="chart-container" style="position: relative; height: 200px;">
+                        <canvas id="fieldChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Module -->
+<div class="modal hidden" id="quizModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🧪 Quantum Quiz Arena</h3>
+            <button class="modal-close" data-modal="quizModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="quiz-info">
+                <div class="stat">Question: <span id="questionNumber">1</span>/10</div>
+                <div class="stat">Time: <span id="quizTimer">30</span>s</div>
+                <div class="stat">Score: <span id="quizCurrentScore">0</span></div>
+                <div class="stat">Streak: <span id="streak">0</span></div>
+            </div>
+
+            <div class="quiz-container" id="quizContainer">
+                <div class="question-panel">
+                    <h4 id="questionText">Ready to start your quantum knowledge test?</h4>
+                    <div class="options-container" id="optionsContainer">
+                        <!-- Options will be generated here -->
+                    </div>
+                    <div class="explanation hidden" id="explanation">
+                        <!-- Explanation will appear here -->
+                    </div>
+                </div>
+
+                <div class="quiz-controls">
+                    <button class="btn btn--primary" id="startQuiz">🎯 Start Quiz</button>
+                    <button class="btn btn--secondary" id="nextQuestion">Next ➤</button>
+                </div>
+            </div>
+
+            <div class="quiz-results hidden" id="quizResults">
+                <h4>Quiz Complete!</h4>
+                <div class="results-summary">
+                    <div class="result-stat">Final Score: <span id="finalScore">0</span></div>
+                    <div class="result-stat">Correct: <span id="correctAnswers">0</span>/10</div>
+                    <div class="result-stat">Best Streak: <span id="bestStreak">0</span></div>
+                </div>
+                <button class="btn btn--primary" id="retakeQuiz">🔄 Try Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Achievement Toast -->
+<div class="achievement-toast hidden" id="achievementToast">
+    <div class="achievement-content">
+        <span class="achievement-icon">🏆</span>
+        <div class="achievement-text">
+            <div class="achievement-title">Achievement Unlocked!</div>
+            <div class="achievement-description"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-message hidden" id="successMessage">
+    <div class="success-content">
+        <div class="success-icon">✨</div>
+        <div class="success-text"></div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
