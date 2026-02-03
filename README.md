@@ -1,4 +1,5 @@
-<img width="1920" alt="Quantum Game Screenshot" src="SCREENSHOT_LINK_HERE" />
+<img width="1920" height="912" alt="QUANTUM GAME" src="https://github.com/user-attachments/assets/c5e68e62-4e6e-4611-aeec-c955ce52e247" />
+
 
 ## Quantum Game
 Interactive browser-based simulation inspired by quantum concepts, built using pure HTML, CSS, and vanilla JavaScript. The project focuses on sense-and-decode mechanics, event-driven UI behavior, and clean front-end architecture without frameworks.
