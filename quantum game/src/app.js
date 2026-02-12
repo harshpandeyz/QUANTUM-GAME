@@ -91,7 +91,7 @@ class GameState {
     awardBadge(badge) {
         if (!this.badges.includes(badge.id)) {
             this.badges.push(badge.id);
-            this.showAchievement('Achievement Unlocked!', badge.name);
+            this.showAchievement('Achievement Unlocked bro !', badge.name);
             this.updateUI();
         }
     }
@@ -1347,3 +1347,4 @@ document.addEventListener("DOMContentLoaded", () => {
     if (senseBtn) senseBtn.addEventListener("click", sense);
     if (decodeBtn) decodeBtn.addEventListener("click", decode);
 });
+
